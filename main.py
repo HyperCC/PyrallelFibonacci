@@ -88,5 +88,27 @@ def potenciaFormatter(values):
     return formattedValues
 
 
+def app():
+    """ Principal main function """
+
+    print('Fibonacci Code', end='\n')
+
+    # to the first 300 numbers
+    for i in range(300):
+        iIndex = i+1
+
+        # calculate the fibonacci for the current value i
+        fibonacciValue = fibonacciCalc(iIndex)
+        # get a array with all values to a fibonacci value
+        factorValue = factorization(fibonacciValue)
+        # make a string with formated factorizacion
+        formattedValues = ' x '.join(potenciaFormatter(factorValue))
+
+        print(f'{iIndex} : {fibonacciValue} = {formattedValues}')
+
+    print('Finalization..')
+
+
 if __name__ == "__main__":
-    print('hola mundo')
+    """ Main execution with app() """
+    app()
