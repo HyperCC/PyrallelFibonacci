@@ -1,15 +1,18 @@
 
+# save all Fibonacci Sequence
+fibNumbers = []
+
+
 def fibonacciCalc(num):
-    """ Calculate for find the Fibonacci code with the number asigned """
-    if num < 2:
-        return num
+    """ Calculate for find the Fibonacci code for the number asigned """
+    if num <= 2:
+        return 1
 
     else:
-        # calculate the fibonacci code
-        i = fibonacciCalc(num-1)
-        j = fibonacciCalc(num-2)
+        # calculate the fibonacci code according to a index
+        fibValue = fibNumbers[num-2] + fibNumbers[num-3]
 
-        return i + j
+        return fibValue
 
 
 def factorization(fib):
@@ -91,7 +94,7 @@ def potenciaFormatter(values):
 def app():
     """ Principal main function """
 
-    print('Fibonacci Code', end='\n')
+    print('Fibonacci Sequence')
 
     # to the first 300 numbers
     for i in range(300):
@@ -99,6 +102,8 @@ def app():
 
         # calculate the fibonacci for the current value i
         fibonacciValue = fibonacciCalc(iIndex)
+        fibNumbers.append(fibonacciValue)
+
         # get a array with all values to a fibonacci value
         factorValue = factorization(fibonacciValue)
         # make a string with formated factorizacion
