@@ -36,5 +36,20 @@ def factorization(fib):
     return values
 
 
+def unicode_exp(exp):
+    """ Get a exponent number for html format
+        https://es.stackoverflow.com/questions/316023/imprimir-exponente-en-python """
+
+    # get different values for unitary exponenets (from 0 to 9)
+    if exp == 1:
+        return chr(0xB9)
+
+    if exp == 2 or exp == 3:
+        return chr(0xB0 + exp)
+
+    else:
+        return chr(0x2070 + exp)
+
+
 if __name__ == "__main__":
     print('hola mundo')
