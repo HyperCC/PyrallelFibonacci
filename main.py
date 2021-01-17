@@ -51,5 +51,42 @@ def unicode_exp(exp):
         return chr(0x2070 + exp)
 
 
+def potenciaFormatter(values):
+    """ A kind of Reduce() function is created as in Mapreduce() to obtain a 
+        python dictionary with key-value pairs where the key is unique and the 
+        value is the number of occurrences of the key in the original array """
+
+    # if there is only 1 value
+    if len(values) == 1:
+        return values
+
+    cont = 0
+    current = values[0]
+    dictionary = dict()
+
+    # for all values iterate to get the number of occurrences for each key. "Reduce()"
+    for val in values:
+        if(val == current):
+            cont += 1
+
+        else:
+            dictionary.setdefault(current, cont)
+            current = val
+            cont = 1
+    dictionary.setdefault(current, cont)
+
+    # the dictionary for the reduce result
+    formattedValues = []
+    keys = dictionary.keys()
+
+    # save a number with exponent format only if is the exponent is greater than 1
+    for key in keys:
+        formattedValues.append(str(key)+unicode_exp(dictionary.get(key))) \
+            if dictionary.get(key) > 1 \
+            else formattedValues.append(str(key))
+
+    return formattedValues
+
+
 if __name__ == "__main__":
     print('hola mundo')
