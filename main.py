@@ -1,3 +1,4 @@
+import multiprocessing as mp
 
 # save all Fibonacci Sequence
 fibNumbers = []
@@ -6,17 +7,19 @@ fibNumbers = []
 def fibonacciCalc(num):
     """ Calculate for find the Fibonacci code for the number asigned """
     if num <= 2:
+        fibNumbers.append(1)
         return 1
 
     else:
         # calculate the fibonacci code according to a index
         fibValue = fibNumbers[num-2] + fibNumbers[num-3]
-
+        fibNumbers.append(fibValue)
         return fibValue
 
 
 def factorization(fib):
     """ Numeric factorization for a fibonacci number """
+    print(f"initializing factorization for {fib}")
 
     divisor = 2
     values = []
@@ -35,7 +38,6 @@ def factorization(fib):
 
             else:
                 divisor += 1
-
     return values
 
 
@@ -55,8 +57,8 @@ def unicode_exp(exp):
 
 
 def potenciaFormatter(values):
-    """ A kind of Reduce() function is created as in Mapreduce() to obtain a 
-        python dictionary with key-value pairs where the key is unique and the 
+    """ A kind of Reduce() function is created as in Mapreduce() to obtain a
+        python dictionary with key-value pairs where the key is unique and the
         value is the number of occurrences of the key in the original array """
 
     # if there is only 1 value
@@ -91,29 +93,50 @@ def potenciaFormatter(values):
     return formattedValues
 
 
-def app():
-    """ Principal main function """
+def app(LIMIT):
+    """ Principal function to alculate fibonacci series from 1 to LIMIT """
+    print('***************** Fibonacci Sequence *****************')
 
-    print('Fibonacci Sequence')
+    # list with numbers to evalue
+    valuesRange = list(range(LIMIT+1))[1:]
 
-    # to the first 300 numbers
-    for i in range(300):
-        iIndex = i+1
-
+    # Init multiprocessing.Pool() for calculate fibonacci series
+    with mp.Pool(mp.cpu_count()) as pool:
         # calculate the fibonacci for the current value i
-        fibonacciValue = fibonacciCalc(iIndex)
-        fibNumbers.append(fibonacciValue)
+        savesFib = pool.map(fibonacciCalc, [i for i in valuesRange])
 
+    print("Fibonacci values has finished its calculation")
+
+    # Init multiprocessing.Pool() for calculate factorization
+    with mp.Pool(mp.cpu_count()) as pool:
         # get a array with all values to a fibonacci value
-        factorValue = factorization(fibonacciValue)
-        # make a string with formated factorizacion
-        formattedValues = ' x '.join(potenciaFormatter(factorValue))
+        factorValues = pool.map_async(
+            factorization, [i for i in savesFib]).get()
 
-        print(f'{iIndex} : {fibonacciValue} = {formattedValues}')
+    print("Fibonacci factorization has finished its calculation")
+
+    # Init multiprocessing.Pool() for calculate exponents in factors
+    with mp.Pool(mp.cpu_count()) as pool:
+        # make a string with formated factorizacion
+        formattedValues = pool.map(
+            potenciaFormatter, [i for i in factorValues])
+
+    print("Calculate of exponents in factorsfactorization has finished")
+
+    # print of results
+    for i in valuesRange:
+        currentLine = str(
+            i) + ' : ' + str(savesFib[i-1]) + ' = ' + ' x '.join(formattedValues[i-1])
+        print(currentLine)
 
     print('Finalization..')
 
 
 if __name__ == "__main__":
-    """ Main execution with app() """
-    app()
+    """ Main execution"""
+
+    # max numer to calculate fibonacci series
+    LIMIT = 300
+
+    # Calculate fibonacci series from 1 to LIMIT
+    app(LIMIT)
