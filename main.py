@@ -118,8 +118,8 @@ def app(LIMIT):
     # Init multiprocessing.Pool() for calculate exponents in factors
     with mp.Pool(mp.cpu_count()) as pool:
         # make a string with formated factorizacion
-        formattedValues = pool.map(
-            potenciaFormatter, [i for i in factorValues])
+        formattedValues = pool.map_async(
+            potenciaFormatter, [i for i in factorValues]).get()
 
     print("Calculate of exponents in factorsfactorization has finished")
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
     """ Main execution"""
 
     # max numer to calculate fibonacci series
-    LIMIT = 300
+    LIMIT = 40
 
     # Calculate fibonacci series from 1 to LIMIT
     app(LIMIT)
